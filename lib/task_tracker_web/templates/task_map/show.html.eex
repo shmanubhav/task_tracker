@@ -1,0 +1,8 @@
+<h1>Show Task map</h1>
+
+<ul>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.task_map_path(@conn, :edit, @task_map) %></span>
+<span><%= link "Back", to: Routes.task_map_path(@conn, :index) %></span>
