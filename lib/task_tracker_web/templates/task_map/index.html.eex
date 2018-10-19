@@ -19,6 +19,8 @@
         <td><% task_map.task.description %></td>
         <td><% task_map.task.complete %></td>
       </tr>
+    <% else %>
+
     <% end %>
   <% end %>
 <% else %>
