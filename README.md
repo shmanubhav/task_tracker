@@ -1,20 +1,10 @@
 # TaskTracker
 
-To start your Phoenix server:
+This App uses a PostgreSQL database with 3 tables: users, tasks and task_map
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+Users have an id, name and email
+Tasks have an id, title, description, time taken (in sets of 15 minutes) and whether
+the task has been completed or not.
+The Task Map table is a relational map between the tables users and tasks and
+stores the corresponding user id of the task which has been assigned to them.
+It has three fields: id, user_id and task_id
