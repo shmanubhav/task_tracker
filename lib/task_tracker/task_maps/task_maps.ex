@@ -19,6 +19,8 @@ defmodule TaskTracker.TaskMaps do
   """
   def list_task_map do
     Repo.all(TaskMap)
+    |> Repo.preload(:user)
+    |> Repo.preload(:task)
   end
 
   @doc """

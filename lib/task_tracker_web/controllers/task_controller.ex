@@ -3,15 +3,19 @@ defmodule TaskTrackerWeb.TaskController do
 
   alias TaskTracker.Tasks
   alias TaskTracker.Tasks.Task
+  alias TaskTracker.TaskMaps
+  alias TaskTracker.TaskMaps.TaskMap
 
   def index(conn, _params) do
     tasks = Tasks.list_tasks()
-    render(conn, "index.html", tasks: tasks)
+    task_map = TaskMaps.list_task_map()
+    render(conn, "index.html", tasks: tasks, task_map: task_map)
   end
 
   def new(conn, _params) do
     changeset = Tasks.change_task(%Task{})
-    render(conn, "new.html", changeset: changeset)
+    task_map = TaskMaps.list_task_map()
+    render(conn, "new.html", changeset: changeset, task_map: task_map)
   end
 
   def create(conn, %{"task" => task_params}) do
@@ -28,13 +32,17 @@ defmodule TaskTrackerWeb.TaskController do
 
   def show(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
-    render(conn, "show.html", task: task)
+    task_map = TaskMaps.list_task_map()
+    user_id = get_session(conn, :user_id)
+    item_cset = TaskMaps.change_task_map(%TaskMaps.TaskMap{user_id: user_id, task_id: task.id})
+    render(conn, "show.html", task: task, task_map: task_map)
   end
 
   def edit(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
     changeset = Tasks.change_task(task)
-    render(conn, "edit.html", task: task, changeset: changeset)
+    task_map = TaskMaps.list_task_map()
+    render(conn, "edit.html", task: task, changeset: changeset, task_map: task_map)
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do

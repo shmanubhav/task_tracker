@@ -4,8 +4,8 @@ defmodule TaskTracker.TaskMaps.TaskMap do
 
 
   schema "task_map" do
-    field :user_id, :id
-    field :task_id, :id
+    belongs_to :user, TaskTracker.Users.User
+    belongs_to :task, TaskTracker.Tasks.Task
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule TaskTracker.TaskMaps.TaskMap do
   @doc false
   def changeset(task_map, attrs) do
     task_map
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:user_id, :task_id])
+    |> validate_required([:user_id, :task_id])
   end
 end

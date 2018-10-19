@@ -1,24 +1,27 @@
-<h1>Listing Task map</h1>
+<h1>My Tasks</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
-
-      <th></th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
-<%= for task_map <- @task_map do %>
-    <tr>
-
-      <td>
-        <%= link "Show", to: Routes.task_map_path(@conn, :show, task_map) %>
-        <%= link "Edit", to: Routes.task_map_path(@conn, :edit, task_map) %>
-        <%= link "Delete", to: Routes.task_map_path(@conn, :delete, task_map), method: :delete, data: [confirm: "Are you sure?"] %>
-      </td>
-    </tr>
+<% if @current_user do %>
+  <%= for task_map <- @task_map do %>
+    <% if task_map.user.email == @current_user.email do %>
+      <tr>
+        <td>
+          <%= link(task_map.task.title, to: Routes.task_path(@conn, :show,  task_map.task_id)) %>
+        </td>
+        <td><% task_map.task.description %></td>
+        <td><% task_map.task.complete %></td>
+      </tr>
+    <% end %>
+  <% end %>
+<% else %>
 <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Task map", to: Routes.task_map_path(@conn, :new) %></span>
