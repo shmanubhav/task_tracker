@@ -13,7 +13,7 @@ defmodule TaskTrackerWeb.SessionController do
     else
       conn
       |> put_flash(:error, "Login Failed.")
-      |> redirect(to: Route.page_path(conn, :index))
+      |> redirect(to: Routes.page_path(conn, :index))
     end
   end
 

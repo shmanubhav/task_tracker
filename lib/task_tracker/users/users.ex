@@ -43,6 +43,11 @@ defmodule TaskTracker.Users do
     Repo.get_by(User, email: email)
   end
 
+  def get_names do
+    query = from u in User, select: u.name
+    Repo.all(query)
+  end
+
   @doc """
   Creates a user.
 

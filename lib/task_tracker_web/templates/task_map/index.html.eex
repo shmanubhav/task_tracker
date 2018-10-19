@@ -1,3 +1,4 @@
+<%= if @current_user do %>
 <h1>My Tasks</h1>
 
 <table class="table table-striped">
@@ -6,12 +7,12 @@
       <th>Title</th>
       <th>Description</th>
       <th>Status</th>
+      <th>Assigned To</th>
     </tr>
   </thead>
   <tbody>
-<% if @current_user do %>
   <%= for task_map <- @task_map do %>
-    <% if task_map.user.email == @current_user.email do %>
+    <%= if task_map.user.id == @current_user.id do %>
       <tr>
         <td>
           <%= link(task_map.task.title, to: Routes.task_path(@conn, :show,  task_map.task_id)) %>
@@ -19,11 +20,12 @@
         <td><% task_map.task.description %></td>
         <td><% task_map.task.complete %></td>
       </tr>
-    <% else %>
-
     <% end %>
   <% end %>
-<% else %>
-<% end %>
   </tbody>
 </table>
+<% else %>
+<div class="container">
+  <h1>Please Login.<h1>
+</div>
+<% end %>

@@ -37,7 +37,11 @@ defmodule TaskTracker.TaskMaps do
       ** (Ecto.NoResultsError)
 
   """
-  def get_task_map!(id), do: Repo.get!(TaskMap, id)
+  def get_task_map!(id) do
+    Repo.get!(TaskMap, id)
+    |> Repo.preload(:user)
+    |> Repo.preload(:task)
+  end
 
   @doc """
   Creates a task_map.

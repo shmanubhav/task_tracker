@@ -1,8 +1,34 @@
-<h1>Show Task map</h1>
+<h1>Task_map</h1>
 
-<ul>
-
-</ul>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Timetaken</th>
+      <th>Complete</th>
+      <th>Assigned To</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td><%= @task_map.task.title %></td>
+      <td><%= @task_map.task.description %></td>
+      <td><%= @task_map.task.timeTaken * 15 %> minutes</td>
+    <%= if @task_map.task.complete do %>
+      <td>✔</td>
+    <% else %>
+      <td>❌</td>
+    <% end %>
+      <td><%= @task_map.user.name %></td>
+      <td>
+        <%= link "Edit", to: Routes.task_map_path(@conn, :edit, @task_map), class: "btn btn-info" %>
+        <%= link "Delete", to: Routes.task_map_path(@conn, :delete, @task_map), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+      </td>
+  </tr>
+  </tbody>
+</table>
 
 <span><%= link "Edit", to: Routes.task_map_path(@conn, :edit, @task_map) %></span>
 <span><%= link "Back", to: Routes.task_map_path(@conn, :index) %></span>
