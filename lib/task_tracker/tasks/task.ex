@@ -9,6 +9,8 @@ defmodule TaskTracker.Tasks.Task do
     field :timeTaken, :integer
     field :title, :string
 
+    # TODO: has_many
+
     timestamps()
   end
 

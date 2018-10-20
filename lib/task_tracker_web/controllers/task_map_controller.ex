@@ -4,6 +4,7 @@ defmodule TaskTrackerWeb.TaskMapController do
   alias TaskTracker.TaskMaps
   alias TaskTracker.TaskMaps.TaskMap
   alias TaskTracker.Users
+  alias TaskTracker.Tasks
 
   def index(conn, _params) do
     task_map = TaskMaps.list_task_map()
@@ -13,7 +14,8 @@ defmodule TaskTrackerWeb.TaskMapController do
   def new(conn, _params) do
     changeset = TaskMaps.change_task_map(%TaskMap{})
     users = TaskTracker.Users.list_users
-    render(conn, "new.html", changeset: changeset, users: users)
+    tasks = TaskTracker.Tasks.list_tasks
+    render(conn, "new.html", changeset: changeset, users: users, tasks: tasks)
   end
 
   def create(conn, %{"task_map" => task_map_params}) do
@@ -24,7 +26,9 @@ defmodule TaskTrackerWeb.TaskMapController do
         |> redirect(to: Routes.task_path(conn, :show, task_map.task_id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        users = TaskTracker.Users.list_users
+        tasks = TaskTracker.Tasks.list_tasks
+        render(conn, "new.html", changeset: changeset, users: users, tasks: tasks)
     end
   end
 

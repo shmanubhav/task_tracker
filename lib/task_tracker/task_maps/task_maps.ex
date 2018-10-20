@@ -7,6 +7,8 @@ defmodule TaskTracker.TaskMaps do
   alias TaskTracker.Repo
 
   alias TaskTracker.TaskMaps.TaskMap
+  alias TaskTracker.Tasks.Task
+  alias TaskTracker.Users.User
 
   @doc """
   Returns the list of task_map.
@@ -21,6 +23,21 @@ defmodule TaskTracker.TaskMaps do
     Repo.all(TaskMap)
     |> Repo.preload(:user)
     |> Repo.preload(:task)
+  end
+
+  def get_map_for_task(taskid) do
+    Repo.get_by(Task, id: taskid)
+  end
+
+  def get_user_for_task(taskid) do
+    query = from t in TaskMap, where: t.task_id == ^taskid, select: t.user_id 
+    val = Repo.all(query)
+    val = List.first(val)
+    if val == nil do
+      val    
+    else
+      Repo.get_by(User, id: val)
+    end
   end
 
   @doc """
