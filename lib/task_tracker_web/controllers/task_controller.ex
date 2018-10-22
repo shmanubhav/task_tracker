@@ -34,7 +34,7 @@ defmodule TaskTrackerWeb.TaskController do
     task = Tasks.get_task!(id)
     task_map = TaskMaps.list_task_map()
     user_id = get_session(conn, :user_id)
-    item_cset = TaskMaps.change_task_map(%TaskMaps.TaskMap{user_id: user_id, task_id: task.id})
+    # item_cset = TaskMaps.change_task_map(%TaskMaps.TaskMap{user_id: user_id, task_id: task.id})
     map_task = TaskTracker.TaskMaps.get_map_for_task(id)
     render(conn, "show.html", task: task, task_map: task_map, map_task: map_task)
   end

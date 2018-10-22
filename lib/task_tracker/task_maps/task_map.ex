@@ -15,5 +15,7 @@ defmodule TaskTracker.TaskMaps.TaskMap do
     task_map
     |> cast(attrs, [:user_id, :task_id])
     |> validate_required([:user_id, :task_id])
+    |> cast_assoc(:task, required: true)
+    |> cast_assoc(:user, required: true)
   end
 end

@@ -16,4 +16,4 @@ alias TaskTracker.TaskMaps.TaskMap
 
 Repo.insert!(%User{email: "mercury@localhost.com", name: "Mercury January"})
 Repo.insert!(%User{email: "venus@localhost.com", name: "Venus February"})
-Repo.insert!(%TaskMap{user_id: 2, task_id: 1})
+# Repo.insert!(%TaskMap{user_id: 2, task_id: 1})

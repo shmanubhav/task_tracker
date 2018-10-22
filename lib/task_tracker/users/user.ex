@@ -7,6 +7,9 @@ defmodule TaskTracker.Users.User do
     field :email, :string
     field :name, :string
 
+    has_many :task_map, TaskTracker.TaskMaps.TaskMap
+    has_many :task, through: [:task_map, :task]
+
     timestamps()
   end
 

@@ -9,7 +9,8 @@ defmodule TaskTracker.Tasks.Task do
     field :timeTaken, :integer
     field :title, :string
 
-    # TODO: has_many
+    has_one :task_map, TaskTracker.TaskMaps.TaskMap
+    has_one :user, through: [:task_map, :user]
 
     timestamps()
   end

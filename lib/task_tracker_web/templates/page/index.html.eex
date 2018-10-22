@@ -2,7 +2,11 @@
   <div class="row">
     <div class="col">
       <h1>Task Tracker App</h1>
+      <%= if @current_user do %>
+      <%= link "My Tasks", to: Routes.task_map_path(@conn, :index), class: "btn btn-primary" %>
+      <%= else %>
       <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn   btn-info" %>
+      <% end %>
     </div>
   </div>
 </div>
