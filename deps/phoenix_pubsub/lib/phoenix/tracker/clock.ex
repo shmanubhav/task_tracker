@@ -28,7 +28,7 @@ defmodule Phoenix.Tracker.Clock do
   end
 
   @doc """
-  Checks of one clock causally dominates the other for all replicas.
+  Checks if one clock causally dominates the other for all replicas.
   """
   @spec dominates?(context, context) :: boolean
   def dominates?(c1, c2) when map_size(c1) < map_size(c2), do: false
@@ -43,7 +43,7 @@ defmodule Phoenix.Tracker.Clock do
   end
 
   @doc """
-  Checks of one clock causally dominates the other for their shared replicas.
+  Checks if one clock causally dominates the other for their shared replicas.
   """
   def dominates_or_equal?(c1, c2) when c1 == %{} and c2 == %{}, do: true
   def dominates_or_equal?(c1, _c2) when c1 == %{}, do: false
@@ -71,6 +71,15 @@ defmodule Phoenix.Tracker.Clock do
     Map.merge(c1, c2, fn _, v1, v2 -> min(v1, v2) end)
   end
 
+  @doc """
+  Returns the clock with just provided replicas.
+  """
+  def filter_replicas(c, replicas), do: Map.take(c, replicas)
+
+  @doc """
+  Returns replicas from the given clock.
+  """
+  def replicas(c), do: Map.keys(c)
 
   defp filter_clocks(clockset, {node, clock}) do
     clockset

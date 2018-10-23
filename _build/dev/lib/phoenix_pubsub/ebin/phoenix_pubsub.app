@@ -16,5 +16,5 @@
                         'Elixir.Phoenix.Tracker.Shard',
                         'Elixir.Phoenix.Tracker.State']},
               {registered,[]},
-              {vsn,"1.1.0"},
+              {vsn,"1.1.1"},
               {mod,{'Elixir.Phoenix.PubSub.Supervisor',[]}}]}.

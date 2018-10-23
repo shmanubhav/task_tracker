@@ -1,7 +1,8 @@
 defmodule Plug.RequestId do
   @moduledoc """
-  A plug for generating a unique request id for each request. A generated
-  request id will in the format "uq8hs30oafhj5vve8ji5pmp7mtopc08f".
+  A plug for generating a unique request id for each request. 
+
+  The generated request id will be in the format "uq8hs30oafhj5vve8ji5pmp7mtopc08f".
 
   If a request id already exists as the "x-request-id" HTTP request header,
   then that value will be used assuming it is between 20 and 200 characters.
@@ -26,7 +27,8 @@ defmodule Plug.RequestId do
       existing request ids. This is also the HTTP *response* header that will be
       set with the request id. Default value is "x-request-id"
 
-        plug Plug.RequestId, http_header: "custom-request-id"
+          plug Plug.RequestId, http_header: "custom-request-id"
+
   """
 
   require Logger
@@ -57,7 +59,7 @@ defmodule Plug.RequestId do
 
   defp generate_request_id do
     binary = <<
-      System.system_time(:nanoseconds)::64,
+      System.system_time(:nanosecond)::64,
       :erlang.phash2({node(), self()}, 16_777_216)::24,
       :erlang.unique_integer()::32
     >>

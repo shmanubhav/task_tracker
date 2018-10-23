@@ -1,12 +1,12 @@
 defmodule PhoenixEcto.Mixfile do
   use Mix.Project
 
-  @version "3.4.0"
+  @version "3.5.0"
 
   def project do
     [app: :phoenix_ecto,
      version: @version,
-     elixir: "~> 1.3",
+     elixir: "~> 1.4",
      deps: deps(),
 
      # Hex
@@ -37,7 +37,7 @@ defmodule PhoenixEcto.Mixfile do
 
   defp deps do
     [{:phoenix_html, "~> 2.9", optional: true},
-     {:ecto, "~> 2.1"},
+     {:ecto, "~> 2.2 or ~> 3.0"},
      {:plug, "~> 1.0"},
      {:ex_doc, ">= 0.0.0", only: :docs}]
   end

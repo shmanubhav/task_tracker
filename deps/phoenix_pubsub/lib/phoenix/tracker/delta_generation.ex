@@ -58,7 +58,11 @@ defmodule Phoenix.Tracker.DeltaGeneration do
     generations
     |> Enum.with_index()
     |> Enum.find(fn {%State{range: {local_start, local_end}}, _} ->
-      Clock.dominates_or_equal?(remote_context, local_start) and
+      local_start = Clock.filter_replicas(local_start, Clock.replicas(remote_context))
+      local_end = Clock.filter_replicas(local_end, Clock.replicas(remote_context))
+
+      not Clock.dominates_or_equal?(local_start, local_end) and
+        Clock.dominates_or_equal?(remote_context, local_start) and
         not Clock.dominates?(remote_context, local_end)
     end)
   end

@@ -41,8 +41,8 @@ defmodule Plug.SSL do
       defaults to `false`
     * `:subdomains` - a boolean on including subdomains or not in HSTS,
       defaults to `false`
-    * `:exclude` - exclude the given hosts from having HSTS applied to them.
-      Defaults to `["localhost"]`
+    * `:exclude` - exclude the given hosts from redirecting to the `https`
+      scheme. Defaults to `["localhost"]`
     * `:host` - a new host to redirect to if the request's scheme is `http`,
       defaults to `conn.host`. It may be set to a binary or a tuple
       `{module, function, args}` that will be invoked on demand
@@ -106,7 +106,7 @@ defmodule Plug.SSL do
   For instance, here is how you would pass the SSL options to the Cowboy
   adapter:
 
-      Plug.Adapters.Cowboy2.https MyPlug, [],
+      Plug.Cowboy.https MyPlug, [],
         port: 443,
         password: "SECRET",
         otp_app: :my_app,
@@ -117,7 +117,7 @@ defmodule Plug.SSL do
 
   or using the new child spec API:
 
-      {Plug.Adapters.Cowboy2, scheme: :https, plug: MyPlug, options: [
+      {Plug.Cowboy, scheme: :https, plug: MyPlug, options: [
          port: 443,
          password: "SECRET",
          otp_app: :my_app,
@@ -194,6 +194,25 @@ defmodule Plug.SSL do
   Please note that specifying a cipher as a binary string is not valid and would silently fail in the past.
   This was problematic because the result would be for Erlang to use the default list of ciphers.
   To prevent this Plug will now throw an error to ensure you're aware of this.
+
+  ## Diffie Hellman parameters
+
+  It is recommended to generate a custom set of Diffie Hellman parameters, to be
+  used for the DHE key exchange. Use the following OpenSSL CLI command to create
+  a 'dhparam.pem' file:
+
+      openssl dhparam -out dhparam.pem 4096
+
+  On a slow machine (e.g. a cheap VPS) this may take several hours. You may want
+  to run the command on a strong machine and copy the file over: the file does
+  not need to be kept secret.
+
+  Add the resulting file to your application's `priv` directory and pass the
+  path using the `:dhfile` key. It is best practice to rotate the file
+  periodically.
+
+  If no custom parameters are specified, Erlang's `ssl` uses its built-in
+  defaults. Since OTP 19 this has been the 2048-bit 'group 14' from RFC 3526.
 
   """
   @spec configure(Keyword.t()) :: {:ok, Keyword.t()} | {:error, String.t()}
@@ -355,9 +374,10 @@ defmodule Plug.SSL do
   def call(conn, {hsts, exclude, host, rewrites, log_level}) do
     conn = rewrite_on(conn, rewrites)
 
-    case conn do
-      %{scheme: :https} -> put_hsts_header(conn, hsts, exclude)
-      %{} -> redirect_to_https(conn, host, log_level)
+    cond do
+      :lists.member(conn.host, exclude) -> conn
+      conn.scheme == :https -> put_hsts_header(conn, hsts)
+      true -> redirect_to_https(conn, host, log_level)
     end
   end
 
@@ -388,15 +408,11 @@ defmodule Plug.SSL do
     end
   end
 
-  defp put_hsts_header(%{host: host} = conn, hsts_header, exclude) when is_binary(hsts_header) do
-    if :lists.member(host, exclude) do
-      conn
-    else
-      put_resp_header(conn, "strict-transport-security", hsts_header)
-    end
+  defp put_hsts_header(conn, hsts_header) when is_binary(hsts_header) do
+    put_resp_header(conn, "strict-transport-security", hsts_header)
   end
 
-  defp put_hsts_header(conn, nil, _), do: conn
+  defp put_hsts_header(conn, nil), do: conn
 
   defp redirect_to_https(%{host: host} = conn, custom_host, log_level) do
     status = if conn.method in ~w(HEAD GET), do: 301, else: 307

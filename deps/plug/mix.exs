@@ -1,18 +1,17 @@
 defmodule Plug.MixProject do
   use Mix.Project
 
-  @version "1.6.4"
+  @version "1.7.0"
   @description "A specification and conveniences for composable modules between web applications"
-  @xref_exclude [:ranch, :cowboy, :cowboy_req, :cowboy_router, :cowboy_stream, :cowboy_stream_h]
+  @xref_exclude [Plug.Cowboy]
 
   def project do
     [
       app: :plug,
       version: @version,
-      elixir: "~> 1.3",
+      elixir: "~> 1.4",
       deps: deps(),
       package: package(),
-      lockfile: lockfile(),
       description: @description,
       name: "Plug",
       xref: [exclude: @xref_exclude],
@@ -29,7 +28,7 @@ defmodule Plug.MixProject do
   # Configuration for the OTP application
   def application do
     [
-      applications: [:crypto, :logger, :mime],
+      extra_applications: [:logger],
       mod: {Plug, []},
       env: [validate_header_keys_during_test: true]
     ]
@@ -38,25 +37,15 @@ defmodule Plug.MixProject do
   def deps do
     [
       {:mime, "~> 1.0"},
-      {:cowboy, "~> 1.0.1 or ~> 1.1 or ~> 2.4", optional: true},
-      {:ex_doc, "~> 0.19", only: :docs},
-      {:inch_ex, ">= 0.0.0", only: :docs},
-      {:hackney, "~> 1.2.0", only: :test},
-      {:kadabra, "~> 0.3.4", only: :test}
+      {:plug_crypto, "~> 1.0"},
+      {:ex_doc, "~> 0.19.1", only: :docs}
     ]
-  end
-
-  defp lockfile() do
-    case System.get_env("COWBOY_VERSION") do
-      "1" <> _ -> "mix-cowboy1.lock"
-      _ -> "mix.lock"
-    end
   end
 
   defp package do
     %{
       licenses: ["Apache 2"],
-      maintainers: ["José Valim"],
+      maintainers: ["Gary Rennie", "José Valim"],
       links: %{"GitHub" => "https://github.com/elixir-plug/plug"},
       files: ["lib", "mix.exs", "README.md", "CHANGELOG.md", "src", ".formatter.exs"]
     }
@@ -68,7 +57,6 @@ defmodule Plug.MixProject do
     # Plug
     # Plug.Builder
     # Plug.Conn
-    # Plug.Crypto
     # Plug.Debugger
     # Plug.ErrorHandler
     # Plug.Exception
@@ -89,11 +77,6 @@ defmodule Plug.MixProject do
         Plug.Session,
         Plug.Static
       ],
-      "Plug.Adapters": [
-        Plug.Adapters.Cowboy,
-        Plug.Adapters.Cowboy2,
-        Plug.Adapters.Translator
-      ],
       "Plug.Conn": [
         Plug.Conn.Adapter,
         Plug.Conn.Cookies,
@@ -101,11 +84,6 @@ defmodule Plug.MixProject do
         Plug.Conn.Status,
         Plug.Conn.Unfetched,
         Plug.Conn.Utils
-      ],
-      "Plug.Crypto": [
-        Plug.Crypto.KeyGenerator,
-        Plug.Crypto.MessageEncryptor,
-        Plug.Crypto.MessageVerifier
       ],
       "Plug.Parsers": [
         Plug.Parsers.JSON,

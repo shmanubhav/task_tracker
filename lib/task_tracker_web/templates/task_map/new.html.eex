@@ -1,5 +1,0 @@
-<h1>New Task Assignment</h1>
-
-<%= render "form2.html", Map.put(assigns, :action, Routes.task_map_path(@conn, :create)) %>
-
-<span><%= link "Back", to: Routes.task_map_path(@conn, :index) %></span>

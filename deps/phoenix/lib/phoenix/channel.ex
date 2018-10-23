@@ -200,7 +200,7 @@ defmodule Phoenix.Channel do
   Sometimes you may need to programmatically subscribe a socket to external
   topics in addition to the the internal `socket.topic`. For example,
   imagine you have a bidding system where a remote client dynamically sets
-  preferences on tasks they want to receive bidding notifications on.
+  preferences on products they want to receive bidding notifications on.
   Instead of requiring a unique channel process and topic per
   preference, a more efficient and simple approach would be to subscribe a
   single channel to relevant notifications via your endpoint. For example:
@@ -209,19 +209,19 @@ defmodule Phoenix.Channel do
         use Phoenix.Channel
 
         def join("notification:" <> user_id, %{"ids" => ids}, socket) do
-          topics = for task_id <- ids, do: "task:#{task_id}"
+          topics = for product_id <- ids, do: "product:#{product_id}"
 
           {:ok, socket
                 |> assign(:topics, [])
                 |> put_new_topics(topics)}
         end
 
-        def handle_in("watch", %{"task_id" => id}, socket) do
-          {:reply, :ok, put_new_topics(socket, ["task:#{id}"])}
+        def handle_in("watch", %{"product_id" => id}, socket) do
+          {:reply, :ok, put_new_topics(socket, ["product:#{id}"])}
         end
 
-        def handle_in("unwatch", %{"task_id" => id}, socket) do
-          {:reply, :ok, MyApp.Endpoint.unsubscribe("task:#{id}")}
+        def handle_in("unwatch", %{"product_id" => id}, socket) do
+          {:reply, :ok, MyApp.Endpoint.unsubscribe("product:#{id}")}
         end
 
         defp put_new_topics(socket, topics) do

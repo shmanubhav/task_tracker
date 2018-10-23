@@ -59,7 +59,7 @@ defmodule Phoenix.Tracker do
 
         def start_link(opts) do
           opts = Keyword.merge([name: __MODULE__], opts)
-          GenServer.start_link(Phoenix.Tracker, [__MODULE__, opts, opts], name: __MODULE__)
+          Phoenix.Tracker.start_link(__MODULE__, opts, opts)
         end
 
         def init(opts) do
@@ -123,7 +123,7 @@ defmodule Phoenix.Tracker do
     * `key` - The key identifying this presence
     * `meta` - The map of metadata to attach to this presence
 
-  A process may be tracked multipled times, provided the topic and key pair
+  A process may be tracked multiple times, provided the topic and key pair
   are unique for any prior calls for the given process.
 
   ## Examples

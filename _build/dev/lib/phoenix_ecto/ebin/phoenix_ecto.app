@@ -14,8 +14,9 @@
                         'Elixir.Plug.Exception.Ecto.InvalidChangesetError',
                         'Elixir.Plug.Exception.Ecto.NoResultsError',
                         'Elixir.Plug.Exception.Ecto.Query.CastError',
+                        'Elixir.Plug.Exception.Ecto.StaleEntryError',
                         'Elixir.Plug.Exception.Ecto.SubQueryError']},
               {registered,[]},
-              {vsn,"3.4.0"},
+              {vsn,"3.5.0"},
               {mod,{'Elixir.Phoenix.Ecto',[]}},
               {env,[{exclude_ecto_exceptions_from_plug,[]}]}]}.
